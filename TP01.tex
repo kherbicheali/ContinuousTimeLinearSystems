@@ -1,0 +1,341 @@
+\documentclass[12pt, a4paper, openany]{report}
+
+\def\VersionRapport{1.0}
+
+\usepackage[utf8]{inputenc} % un package
+\usepackage[T1]{fontenc}      % un second package
+\usepackage[francais,english]{babel}  % un troisième package
+\usepackage{layout}
+\usepackage[top=2.7cm, bottom=2.5cm, left=3.5cm, right=3cm]{geometry}
+\usepackage{setspace}
+
+\frenchbsetup{StandardLists=true} % à inclure si on utilise \usepackage[french]{babel}
+\usepackage{enumitem}
+\usepackage{amssymb}
+
+\usepackage{color}
+\usepackage{listings}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\usepackage{multirow} % pour les tableaux
+\usepackage[table]{xcolor} % pour les tableaux
+
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{pifont}
+\usepackage{amsmath}
+\usepackage{moreverb}
+\usepackage{url}
+\usepackage{pst-all}
+\usepackage{eso-pic,graphicx}
+\usepackage{caption} 
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=red]{hyperref}
+\usepackage{array}
+\usepackage[toc,page]{appendix}
+\usepackage[off]{auto-pst-pdf}
+\usepackage[upright]{fourier}
+\usepackage{hyperref} % pour le sommaire table des matières
+\AddThinSpaceBeforeFootnotes % à insérer si on utilise \usepackage[french]{babel}
+\FrenchFootnotes % à insérer si on utilise \usepackage[french]{babel}
+\usepackage{fancyhdr}
+\pagestyle{headings}
+
+\renewcommand{\appendixpagename}{Annexes}
+\renewcommand{\appendixtocname}{Annexes}
+
+\title{Theme: Performance & Robustesse}
+\author{Ali \bsc{Kherbiche}}
+\date{2018-2019}
+
+
+
+%new
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+
+\begin{document}
+
+\selectlanguage{francais}
+\pagenumbering{arabic} 
+
+\makeatletter
+  \begin{titlepage}
+  
+
+  \begin{sffamily}
+   \begin{center}
+
+    % Upper part of the page. The '~' is needed because \\
+    % only works if a paragraph has started.
+    \includegraphics[scale=0.5]{Logo_UT3.jpg}~\\[1.5cm]
+
+    \textsc{\LARGE UFR EEA }\\[2cm]
+    
+    %\textsc{\Large Rapport Performance et Robustesse}\\[1.5cm]
+    
+    \textsc{\Large Rapport analyse et performances des systèmes linéaires}\\[1cm]
+
+    % Title
+    \HRule \\[0.4cm]
+    \textsc{ \huge Asservissement d'un système à trois bacs d'eau\\[0.4cm] }
+
+    \HRule \\[2cm]
+    \includegraphics[width=3cm,height=3cm,keepaspectratio] {cropped-Logo-master-EEA.jpg}
+    \\[2cm]
+
+    % Author and supervisor
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushleft} \large
+         \textsc{Kherbiche Ali}\\
+         \textsc{Halimi Amine}\\
+        \emph {Promotion:} \\
+         \textsc{2018-2019}\\
+      \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+      \begin{flushright} \large
+        \emph{Encadreur et Responsable de la Formation M1 ISTR-RODECO :}  \textsc{M. Frédéric GOUAISBAUT}\\
+        %\emph{Responsable de la Formation:} \textsc{M. BIDON}
+      \end{flushright}
+    \end{minipage}
+
+    \vfill
+
+    % Bottom of the page
+    \emph{\large Novembre 2018}
+
+  \end{center}
+  \end{sffamily}      
+          
+  \end{titlepage}
+  
+\makeatother
+
+
+
+% *********************** Remerciements *****************
+\chapter*{Remerciements}
+ \addcontentsline{toc}{chapter}{Remerciements}
+  
+  \paragraph{}
+   Nous tenons à remercier notre encadreur et professeur de cours, M.Frédéric GOUAISBAUT pour nous avoir guidé tout au long des deux séances de TP, nous tenons aussi à lui reconnaitre le temps qu'il nous a consacré afin de nous orienter et de nous conseiller.\\
+  \paragraph{}
+   Nous remercions notre professeur de TD M.Sylvain DUROLA.......     
+   
+%*********************** somaire **************
+\tableofcontents
+%*********************** listes des figures **************
+\listoffigures
+%*********************** listes des tableaux **************
+\listoftables
+
+
+
+%*********************** INTRODUCTION **************
+\chapter*{Introduction}
+ \addcontentsline{toc}{chapter}{Introduction}
+ 
+ \paragraph{}
+  Le but de cette manipulation est d'illustrer la commande robuste d'un système non linéaire linéarisé autour d'un point de fonctionnement et de mettre en oeuvre les techniques d'analyse et de synthèse de lois de commande robuste comme le loop-shapping.\\
+                                                      
+
+
+
+%*********************** Problématique **************
+\chapter*{Problématique}
+ \addcontentsline{toc}{chapter}{Problématique}
+ 
+ \begin{center}
+   %\includegraphics[width=12cm]{index.png}
+   \includegraphics[width=13cm]{rebout.png}
+   \captionof{figure}{\textit{Procédé trois bacs \cite{ref1}}}
+   \label{fig1}
+ \end{center}   
+
+   
+Depuis l’apparition de la nécessité de. \\
+
+\paragraph{}   
+Notre système est soumis à des perturbations exogènes suivants:
+        
+  \begin{enumerate}
+      \item Un débit de fuite constante au niveau du bac numéro 1.
+      \item Un bruit de mesure sur le capteur permettant la mesure de $h_{1}(t)$.
+  \end{enumerate}
+   
+  % Les systèmes .... bla bla... ajoutant à cela quelques problèmes connus:
+    
+  % Malheureusement beaucoup d'entreprises ont bla bla. \\
+   
+  % De nos jours....
+   
+
+%*********************** Performance et Robustesse **************
+\chapter{Analyse d'une commande proportionnelle intégrale}
+
+ \section{Le schéma bloc du systéme bouclé} 
+
+\paragraph{}
+	Après l'ajout du correcteur PI $K(p)= k \frac {1+\tau_{i}p}{\tau_{i}p}$ à notre système, voici à quoi ressemble le       shéma bloc de l'asservissement:
+% captures d’écrans 
+  \begin{center}
+    %\includegraphics[scale=0.5]{Logo_UT3.jpg}
+    \captionof{figure}{\textit{Schéma bloc de l'asservissement}}
+    \label{fig2}
+  \end{center}    
+ 
+ \paragraph{}
+	On voit clairement que le signal du débit de fuite $W_{u}(p)$ du bac numéro 1 est relié au signal de commande $U(p)$ et le signal du bruit de mesure $b(p)$ et relié au signal de sortie $h_{1}(p)$.    
+	
+ \section{La validité de L'hypothèse} 
+  
+ \paragraph{}       
+	Vu que l'eau est un liquide incompréssible, notre supposition du débit de fuite constant tient la route.
+	
+ \section{Le diagramme asymptotique de $K(p)= k \frac {1+\tau_{i}p}{\tau_{i}p}$} 
+ 
+ % captures d’écrans 
+  \begin{center}
+    %\includegraphics[scale=0.5]{Logo_UT3.jpg}
+    \captionof{figure}{\textit{Diagramme de Bode (gain et phase) de $K(jw)$ }}
+    \label{fig3}
+  \end{center}
+
+  \textbf{Nota:} \hspace{2mm} Le correcteur a une allure d'un filtre passe bas.
+
+ \section{Les spécifications satisfaites}
+ 
+  \begin{itemize} [label=\ding{70},font=\small \color{black}]
+  	\item Sans connaître les valeurs numérique du gain $k$ ou celle de la constante de temps $\tau_{i}$ utilisées dans le correcteur $K(p)$, on pourra déjà satisfaire la spécification $(b)$ car un integrateur $\frac{1}{p}$ ce que contient notre correcteur élimine l'erreur de position.
+    \item à toi de jouer...
+  \end{itemize}
+ 
+ \section{Détermination de la contrainte sur le gabarit de $\xi_{p} et \xi_{v} $ pour $S(p)$}  
+ 
+  \subsection{Construction du gabarit de l'erreur de position}
+  
+   On dispose de la loi suivante: \hspace{5mm} $\xi_{p}=\underset{p\longrightarrow 0}{lim}  p\xi(p)$\\[0.75cm]
+   On sait que: \hspace{5mm} $\xi(p)=S(p)R(p)$\\[0.75cm]
+   Avec la consigne qui est égale à: \hspace{5mm} $R(p)=\frac{1}{p}$\\[0.75cm]
+   Donc: \hspace{5mm} $\xi_{p}=\underset{p\longrightarrow 0}{lim} S(p)=S(0)$\\[0.75cm]
+   Si on choisit la fonction de pondération $W_{1}(p)=\frac{\alpha}{p}$ tel que $|W_{1}(p)S(p)|<1$, alors $|S(p)|<\alpha p$, $\alpha \in R^{*}$ \\[0.75cm]
+   On obtient au final: \hspace{5mm} $||S(jw)||_{H\infty}<\alpha jw$, $\alpha \in R^{*}$. Pour valider le choix il suffit de calculer $S(p)$ quand $p\rightarrow0$ qui est égal à $0$, donc $\forall w \in R \hspace{2mm} \xi_{p}=0$ 
+   
+   \begin{center}
+    \includegraphics[scale=0.5]{gabarit1.pdf}
+    \captionof{figure}{\textit{Diagramme illustrant le gabarit de l'erreur de position}}
+    \label{fig4}
+  \end{center}
+   
+  \subsection{Contruction du gabarit de l'erreur de vitesse}
+  
+  Cette fois pour calculer l'erreur de vitesse $\xi_{v}$ le signal de consigne équivaut à $R(p)=\frac{1}{p^{2}}$\\[0.75cm]
+  Donc: \hspace{5mm} $\xi_{v}=\underset{p\longrightarrow 0}{lim}\frac{S(p)}{p}$\\[0.75cm]
+  Si on choisit la fonction de pondération $W_{2}(p)=\frac{\beta}{p}$ tel que $|W_{2}(p)S(p)|<1$, alors $|S(p)|<\beta p$, $\beta \in ]0, 1]$\\[0.75cm]
+  On obtient au final: \hspace{5mm} $||S(jw)||_{H\infty}<\beta jw$, $\beta \in ]0, 1]$. Pour valider le choix il suffit de calculer $S(p)$ quand $p\rightarrow0$ qui est égal à $\beta$, donc $\forall w \in R \hspace{2mm} \xi_{v}=\beta$ 
+  
+  \begin{center}
+    \includegraphics[scale=0.5]{gabarit1.pdf}
+    \captionof{figure}{\textit{Diagramme illustrant le gabarit de l'erreur de vitesse}}
+    \label{fig5}
+  \end{center}
+  
+ \textbf{Nota:} \hspace{2mm} Les deux gabarits vu précédemment sont soit colinéaires soit l'un est comporté ou et inclut dans l'autre.\\
+ 
+ %On dira qu'on a prit w1 = w2 pour éviter tout problème
+
+ \section{La bande passante de $S(p)$}
+ 
+ \paragraph{}
+ On dispose de la relation de la bande passante sur $T(jw)$: $|T(jw)|_{dB}-|T(0)|_{dB}>3dB,\hspace{1mm} \forall w\in[0, w_{c}]$, $w_{c}$: pulsation de coupure.\\
+ Après développement on obtient: $\frac{|T(jw)|}{|T(0)|}>\frac{1}{\sqrt{2}} \Rightarrow |T(jw)|>\frac{1}{\sqrt{2}}, w\in[0, w_{c}]$ qui est la condition nécéssaire qu'il faut satisfaire afin de créer le gabarit équivalent à la spécification sur la vitesse de convergence.\\
+ 
+ \paragraph{}
+ Si on choisit la suivante condition sur $S(jw)$: $|S(jw)|<1-\frac{1}{\sqrt{2}}$ \hspace{1mm} c'est à dire $||S(jw)||_{H\infty}<1-\frac{1}{\sqrt{2}} \hspace{1mm} où \hspace{1mm} w\in[0, w_{c}]$ \\
+ $\Rightarrow$ \hspace{3mm} $\frac{1}{\sqrt{2}}<1-|S(jw)|.........(1)$\\
+ 
+ \paragraph{}
+ Or on sait que: $|T(jw)|+|S(jw)|\geqslant1$\\
+ Ainsi: $1-|S(jw)|\leqslant|T(jw)|.........(2)$\\
+ 
+ \paragraph{}
+ De $(1)$ et $(2)$ on obtient: \hspace{5mm} $\frac{1}{\sqrt{2}}<1-|S(jw)|\leqslant|T(jw)|$\\
+ Il ne reste qu'à dire que pour \hspace{1mm} $\forall w\in[0, w_{c}],$ \hspace{2mm} $\frac{1}{\sqrt{2}}<|T(jw)|$\\
+ 
+ \paragraph{}
+ Au final la fonction de pondération $W_{3}(jw)=\frac{\sqrt{2}}{\sqrt{2}-1}$ \hspace{1mm} s'obtient en validant la condition $|W_{3}(jw)S(jw)|<1.$\hspace{1mm}De cette manière la condition sur $T(jw)$ est respectée, maintenant voyons ce que va donner l'interprétation graphique du gabarit.\\
+ 
+ \section{Construction du gabarit de la vitesse de convergence pour $S(p)$} 
+ 
+  \begin{center}
+    \includegraphics[scale=0.5]{gabarit2.pdf}
+    \captionof{figure}{\textit{Diagramme illustrant le gabarit de la vitesse de convergence pour $S(p)$}}
+    \label{fig6}
+  \end{center}
+  
+ \section{Construction du gabarit de la convergance sans oscillations pour $S(p)$} 
+  
+  \paragraph{}
+  Afin de satisfaire cette spécification du cahier des charges nous choisissons de démarrer par la définition de la marge de module $M_{m} $ qui est inversement propertionnelle à la norme H infinie de la fonction de sensiblité $S(p) $, on trouve $M_{m}=\frac{1}{||S(jw)||_{H\infty}} $ 
+  
+  \paragraph{}
+  On sait que si $ M_{m}>1 $ alors l'asservissement n'aura ni oscillations ni dépassements. Essayons de développer cette idée: \\
+  
+  
+  
+      
+  
+  
+  
+  \paragraph{Définition:}
+  
+Bla bla Mahmoud jamal qassi ssaid mehenna rebout ih rebout ihhhzfsdsdfksdfjdjf sdfj klrzoeri lsldfj 
+ereroejr reljer
+  
+  \paragraph{}
+  fkdfkdfjjfkdkfjksfjlqlqlqlsflqllslfdqsdlqksjdoofdjezfijfikjnqkxcjqk,qsjcfqlsd
+  qflqkjskfjqd;fjkdfjkdjfikdfikdfjdkjkdjfkd  
+   
+ La figure au-dessus a ... bla bla ....\\
+ 
+ Les bla bla ....\\
+ 
+ Néanmoins, cette structure n’est jamais stable au fil du temps, ... bla bla.\\
+  
+ En court, il y a une différence entre ... bla bla ..., est fort envisageable qu’elle subira des changements dans le temps.
+ 
+ \paragraph{Définition:}
+  Bla bla ....
+
+ \section{Section une}
+  ggggggggggggggg
+  \subsection{jamal}
+
+%*********************** CONCLUSION **************
+\chapter*{Conclusion}
+ \addcontentsline{toc}{chapter}{Conclusion}
+ 
+%*********************** Bibliographie ************ 
+\bibliographystyle{alpha}
+\bibliography{bibliographieperfoRobu}  
+
+\end{document}
